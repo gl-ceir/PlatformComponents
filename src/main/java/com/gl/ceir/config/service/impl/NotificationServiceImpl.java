@@ -32,24 +32,26 @@ public class NotificationServiceImpl {
 
     public Object saveNotifications(Notification notification) {
         try {
-            notification.setOperatorName(getActualOperator(notification.getMsisdn().substring(0, 5)));
+            notification.setOperatorName(getActualOperator(notification));
             var value = notificationRepository.save(notification);
             return new GenricResponse(0, "Success", String.valueOf(value.getId()));
         } catch (Exception e) {
-            logger.error(" Exception occurred " + e + "::::::" + e.getLocalizedMessage() + "::::::" +  e.getMessage());
+            logger.error(" Exception occurred " + e + "::::::" + e.getLocalizedMessage() + "::::::" + e.getMessage());
             alertServiceImpl.raiseAlertById("alert_1108");
             return new GenricResponse(1, "Fail", e.getCause().getCause().toString());
         }
     }
 
-    private String getActualOperator(String msisdn) {
-        int series = Integer.parseInt(msisdn.substring(0, 5));
+    private String getActualOperator(Notification notification) {
         try {
+            String msisdn = notification.getMsisdn().substring(0, 5);
+            logger.info("Actual msisdn  is " + msisdn);
+            int series = Integer.parseInt(msisdn.substring(0, 5));
             var value = operatorSeriesRepository.findBySeriesStartLessThanEqualAndSeriesEndGreaterThanEqual(series, series);
             logger.info(" Actual result  " + value);
             return value.getOperatorName();
         } catch (Exception e) {
-            logger.warn("No operator Found for msisdn" + msisdn +": jdbc Response :" + e);
+            logger.warn("No operator Found for msisdn: jdbc Response :" + e);
             return "";
         }
     }
