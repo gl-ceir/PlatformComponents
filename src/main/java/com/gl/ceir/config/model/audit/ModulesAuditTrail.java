@@ -34,6 +34,7 @@ public class ModulesAuditTrail implements Serializable {
     private String featureName;
     private String info;
     private String serverName;
+    private String action;
     private int failureCount;
     private int count;
 
