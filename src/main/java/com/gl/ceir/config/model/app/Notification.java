@@ -70,7 +70,7 @@ public class Notification implements Serializable {
 
     private Integer checkImeiId;
 
-
+    private String attachment;
 
     public Notification() {
     }

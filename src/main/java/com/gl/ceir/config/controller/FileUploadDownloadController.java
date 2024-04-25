@@ -47,7 +47,7 @@ public class FileUploadDownloadController {
 
   //  @PostMapping("/uploadFile")
     public FileUploadDownloadResponse uploadFile(@RequestParam("file") MultipartFile file) {
-        String filePath  = fileStorageService.storeFile(file);
+        String filePath  = fileStorageService.storeFile(null,file);
         logger.info("fileName:" + filePath);
        // String fileDownloadUri = ServletUriComponentsBuilder.fromCurrentContextPath().path("/downloadFile/").path(fileName).toUriString();
         return new FileUploadDownloadResponse(file.getOriginalFilename(), filePath+"/"+file.getOriginalFilename(), file.getContentType(), file.getSize());

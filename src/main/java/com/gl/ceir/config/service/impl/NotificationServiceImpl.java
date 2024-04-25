@@ -13,9 +13,6 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-/**
- * @author maverick
- */
 @Service
 public class NotificationServiceImpl {
 
@@ -44,12 +41,12 @@ public class NotificationServiceImpl {
 
     private String getActualOperator(Notification notification) {
         try {
-            String msisdn = notification.getMsisdn().substring(0, 5);
-            logger.info("Actual msisdn  is " + msisdn);
-            int series = Integer.parseInt(msisdn.substring(0, 5));
+            if (notification.getMsisdn() == null || notification.getMsisdn().isEmpty() || notification.getMsisdn().length() < 5)
+                return "default";
+            int series = Integer.parseInt(notification.getMsisdn().substring(0, 5));
             var value = operatorSeriesRepository.findBySeriesStartLessThanEqualAndSeriesEndGreaterThanEqual(series, series);
-            logger.info(" Actual result  " + value);
-            return value.getOperatorName();
+            // n case of SMS,if series does not match, default keyword for opertor_name in notifications
+            return value == null ? "default" : value.getOperatorName();
         } catch (Exception e) {
             logger.warn("No operator Found for msisdn: jdbc Response :" + e);
             return "";
