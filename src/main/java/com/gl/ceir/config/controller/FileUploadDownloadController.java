@@ -33,7 +33,6 @@ public class FileUploadDownloadController {
 
     @Autowired
     private FileStorageService fileStorageService;
-
  
     @Autowired
     ModulesAuditTrailService modulesAuditTrailService;
@@ -41,10 +40,7 @@ public class FileUploadDownloadController {
     @Autowired
     VirtualIpAddressUtil virtualIpAddressUtil;
 
-    // getVirtualIpDetails getVirtualIpDetails
-
     private static final Logger logger = LogManager.getLogger(FileUploadDownloadController.class);
-
   //  @PostMapping("/uploadFile")
     public FileUploadDownloadResponse uploadFile(@RequestParam("file") MultipartFile file) {
         String filePath  = fileStorageService.storeFile(null,file);
@@ -52,38 +48,28 @@ public class FileUploadDownloadController {
        // String fileDownloadUri = ServletUriComponentsBuilder.fromCurrentContextPath().path("/downloadFile/").path(fileName).toUriString();
         return new FileUploadDownloadResponse(file.getOriginalFilename(), filePath+"/"+file.getOriginalFilename(), file.getContentType(), file.getSize());
     }
-
  //   @PostMapping("/uploadMultipleFiles")
     public List<FileUploadDownloadResponse> uploadMultipleFiles(@RequestParam("files") MultipartFile[] files) {
         logger.info("Upload multiple File " + files.length);
-
-        var response =
-                Arrays.stream(files)
+        var response = Arrays.stream(files)
                 .map(file -> uploadFile(file))
                 .collect(Collectors.toList());
-
         logger.info("Upload multiple response " + response.toString());
         return response;
     }
 
-    //    Downlaoder
- //   @GetMapping("/downloadFile/{fileName:.+}")
+    //    Downlaoder  //   @GetMapping("/downloadFile/{fileName:.+}")
     public ResponseEntity<Resource> downloadFile(@PathVariable String fileName, HttpServletRequest request) {
-        // Load file as Resource
         Resource resource = fileStorageService.loadFileAsResource(fileName);
-        // Try to determine file's content type
         String contentType = null;
         try {
             contentType = request.getServletContext().getMimeType(resource.getFile().getAbsolutePath());
         } catch (IOException ex) {
             logger.info("Could not determine file type.");
         }
-
-        // Fallback to the default content type if type could not be determined
         if (contentType == null) {
             contentType = "application/octet-stream";
         }
-
         return ResponseEntity.ok()
                 .contentType(MediaType.parseMediaType(contentType))
                 .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + resource.getFilename() + "\"")
@@ -104,19 +90,9 @@ public class FileUploadDownloadController {
     }
 
 
-  //  @GetMapping("/testControllerForEngine")
-    public MappingJacksonValue testControllerForEngine(@RequestParam("user") String user, @RequestParam("pass") String pass) {
-
-//                RuleInfo re = new RuleInfo("appdbName", "auddbName", "repdbName", "TAC_FORMAT", "executeRule", "NONCDR", "IMEIESNMEID",
-//                "SNofDevice", "file_name",
-//                "DeviceType", "operator", "DeviceIdType", "operator_tag", "MSISDN",
-//                "action",
-//                "", "", "", "operator",
-//                "", "", "txn_id", "fileArray", "period", null, null);
-
-        //   RuleEngineApplication.startRuleEngine(re);
-
-        logger.info("Going to raise  = ");
+  @GetMapping("/testControllerForUpload")
+    public MappingJacksonValue testControllerForEngine(@RequestParam("path") String path, @RequestParam("pass") String pass) {
+        fileStorageService.uploadFile(path);
         return new MappingJacksonValue("");
     }
 

@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.gl.ceir.config.model.app.UploadedFileDB;
  
 @RestController
-public class UploadedFileController {
+public class FileCopierController {
 
     @Autowired
     private FileCopyServiceImpl fileCopyServiceImpl;
