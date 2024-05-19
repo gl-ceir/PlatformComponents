@@ -1,5 +1,6 @@
 package com.gl.ceir.config.model.app;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -7,11 +8,11 @@ import lombok.Setter;
 import lombok.ToString;
 import org.hibernate.annotations.DynamicInsert;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
+import javax.validation.constraints.Size;
 import java.io.Serializable;
+import java.time.LocalDateTime;
+
 
 @Entity
 @Getter
@@ -42,17 +43,17 @@ public class Notification implements Serializable {
 
     private String subFeature;
 
-    private Integer status;
+//    private Integer status;
 
     private String subject;
 
-    private Integer retryCount;
+ //   private Integer retryCount;
 
-    private String referTable;
+  //  private String referTable;
 
-    private String roleType;
+  //  private String roleType;
 
-    private String receiverUserType;
+  //  private String receiverUserType;
 
     private String email;
 
@@ -60,20 +61,21 @@ public class Notification implements Serializable {
 
     private String operatorName;
 
-
-
+    @Size(max = 2, message = "msgLang must be less than 3 characters")
     private String msgLang;
 
-    private Integer deliveryStatus;
+  //  private Integer deliveryStatus;
 
-    private String sendSmsInterface;
+ //   private String sendSmsInterface;
 
     private Integer checkImeiId;
 
     private String attachment;
 
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private LocalDateTime deliveryDateTime;
+
     public Notification() {
     }
 
-    
 }

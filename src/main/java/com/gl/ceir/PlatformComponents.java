@@ -22,3 +22,4 @@ public class PlatformComponents {
         SpringApplication.run(PlatformComponents.class, args);
     }
 }
+

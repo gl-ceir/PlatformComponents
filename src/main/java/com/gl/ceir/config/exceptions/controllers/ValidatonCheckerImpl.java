@@ -11,7 +11,6 @@ package com.gl.ceir.config.exceptions.controllers;
 public class ValidatonCheckerImpl  implements ValidationChecker{
 
     
-    
     @Override
     public void validator(Class T) {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody

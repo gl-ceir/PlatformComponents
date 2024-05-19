@@ -15,13 +15,16 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.converter.json.MappingJacksonValue;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.validation.Valid;
 
+@Validated
 @RestController
 public class NotificationController {//sachin
 
@@ -42,7 +45,7 @@ public class NotificationController {//sachin
 
     @ApiOperation(value = "Save all Notifications", response = String.class)
     @PostMapping("addNotifications")
-    public MappingJacksonValue addNotifications(@RequestBody Notification notification) {
+    public MappingJacksonValue addNotifications(@RequestBody @Valid Notification notification) {
         MappingJacksonValue mapping = new MappingJacksonValue(notificationServiceImpl.saveNotifications(notification));
         return mapping;
     }

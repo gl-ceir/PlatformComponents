@@ -9,7 +9,7 @@ import org.springframework.context.annotation.PropertySources;
 // @EnableScheduling
 
 @PropertySources({
-    @PropertySource(value = {"file:application.properties"}, ignoreResourceNotFound = true),
+    @PropertySource(value = {"file:applicationPrc.properties"}, ignoreResourceNotFound = true),
     @PropertySource(value = {"file:configuration.properties"}, ignoreResourceNotFound = true)
 })
 
