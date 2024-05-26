@@ -72,6 +72,7 @@ public class Notification implements Serializable {
 
     private String attachment;
 
+    @Column(name="sms_scheduled_time")
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime deliveryDateTime;
 
