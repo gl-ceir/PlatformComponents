@@ -2,15 +2,18 @@
   * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
   * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package com.gl.ceir.config.exceptions;
+package com.gl.ceir.config.exceptions.controllers;
 
 import com.gl.ceir.config.dto.ApiResponse;
 import com.gl.ceir.config.dto.ExceptionResponse;
 import com.gl.ceir.config.dto.Result;
-import java.util.Enumeration;
+
+import java.util.Arrays;
 import java.util.Scanner;
 import java.util.stream.Collectors;
 import javax.servlet.http.HttpServletRequest;
+
+import com.gl.ceir.config.exceptions.*;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,7 +51,6 @@ public class GlobalControllerExceptionHandler {
             logger.error("Error ############ : " + req.getReader().lines().collect(Collectors.joining(System.lineSeparator())));
         } catch (Exception exp) {
             logger.error("Error msgs :" + exp.toString());
-
         }
         return new ExceptionResponse(HttpStatus.NOT_FOUND.value(), "not found", "en", new Result(errorMessage  ));
     }
@@ -76,7 +78,6 @@ public class GlobalControllerExceptionHandler {
             logger.error("Error ############ : " + req.getReader().lines().collect(Collectors.joining(System.lineSeparator())));
         } catch (Exception exp) {
             logger.error("Error msgs :" + exp.toString());
-
         }
         return new ExceptionResponse(HttpStatus.NOT_ACCEPTABLE.value(), "not acceptable", "en", new Result(errorMessage));
     }
@@ -84,7 +85,11 @@ public class GlobalControllerExceptionHandler {
     @ExceptionHandler(Exception.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ExceptionResponse handleBadRequestException(Exception e, WebRequest request) {
-        logger.error("Error msg :" + e.getLocalizedMessage() + " # request " + request.toString());
+        logger.error(e + "in [" + Arrays.stream(e.getStackTrace()).filter(ste -> ste.getClassName().equals(GlobalControllerExceptionHandler.class.getName())).collect(Collectors.toList()).get(0) + "]");
+        logger.error("Error msg :" + e.getLocalizedMessage() + "::::"  +e.getMessage() + " # request " + request.toString());
+        logger.error("Error msg :" + e.toString());
+        logger.error("Error msg :" + e.getCause() );
+        logger.error("Error msg :" + e.fillInStackTrace() );
         try {
             logger.error("Error ############ : " + req.getReader().lines().collect(Collectors.joining(System.lineSeparator())));
         } catch (Exception exp) {
@@ -115,7 +120,6 @@ public class GlobalControllerExceptionHandler {
             logger.error("Error ############ : " + req.getReader().lines().collect(Collectors.joining(System.lineSeparator())));
         } catch (Exception exp) {
             logger.error("Error msgs :" + exp.toString());
-
         }
         return new ExceptionResponse(HttpStatus.INTERNAL_SERVER_ERROR.value(), "server error", "en", new Result(errorMessage));
     }
@@ -200,6 +204,17 @@ public class GlobalControllerExceptionHandler {
         return new ResponseEntity<>(new ApiResponse(HttpStatus.NOT_FOUND.value(), "FAIL", exception.getMessage()),
                 HttpStatus.NOT_FOUND);
     }
+
+
+//    @ExceptionHandler(MethodArgumentNotValidException.class)
+//    public ResponseEntity<ValidationErrorResponse> handleValidationExceptions(MethodArgumentNotValidException ex) {
+//        BindingResult bindingResult = ex.getBindingResult();
+//        List<ValidationErrorResponse.FieldError> errors = bindingResult.getFieldErrors().stream()
+//                .map(error -> new ValidationErrorResponse.FieldError(error.getField(), error.getDefaultMessage()))
+//                .collect(Collectors.toList());
+//        ValidationErrorResponse errorResponse = new ValidationErrorResponse(HttpStatus.BAD_REQUEST.value(), "Validation error", errors);
+//        return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
+//    }
 
 }
 

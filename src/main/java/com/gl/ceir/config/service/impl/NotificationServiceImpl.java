@@ -13,6 +13,9 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+
 @Service
 public class NotificationServiceImpl {
 
@@ -29,7 +32,14 @@ public class NotificationServiceImpl {
 
     public Object saveNotifications(Notification notification) {
         try {
+            logger.info("Request [ {} ]", notification);
             notification.setOperatorName(getActualOperator(notification));
+
+//            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+//            LocalDateTime dateTime = LocalDateTime.parse(notification.getDeliveryDateTime().toString().replace("T", " "), formatter);
+//            logger.info("dateTimedateTime [ {} ]", dateTime);
+//            notification.setDeliveryDateTime(dateTime);
+//            logger.info("Request12321313 [ {} ]", notification);
             var value = notificationRepository.save(notification);
             return new GenricResponse(0, "Success", String.valueOf(value.getId()));
         } catch (Exception e) {
