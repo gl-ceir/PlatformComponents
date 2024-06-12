@@ -14,6 +14,10 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
+
 @Service
 public class AlertServiceImpl {
 
@@ -32,24 +36,36 @@ public class AlertServiceImpl {
                 return new GenricResponse(1, "Fail", "No id found");
             }
             logger.info("Description:::" + alertDb.getDescription());
-            var response = runningAlertDbRepository.save(new RunningAlertDb(0, alertId, alertDb.getDescription(), 0));
+            var response = runningAlertDbRepository.save(new RunningAlertDb(alertId, alertDb.getDescription()));
             return new GenricResponse(0, "Success", String.valueOf(response.getId()));
         } catch (Exception e) {
-            logger.error("Error while raising error by  alert Id " + alertId + "" + e.getMessage(), e);
+            logger.error("Error while raising error by  alert Id " + alertId + " " + e.getMessage(), e);
             return new GenricResponse(1, "Fail", e.getLocalizedMessage());
         }
     }
 
-    public GenricResponse saveAlertWithParam(RunningAlertDb runningAlertDb) {
+    public GenricResponse saveAlertWithParam(Map<String, String> data) {
         try {
+            logger.info("Request {}", data);
+            RunningAlertDb runningAlertDb = new RunningAlertDb(data.getOrDefault("alertId", ""), data.getOrDefault("alertMessage", ""), data.getOrDefault("alertProcess", ""), data.getOrDefault("description", ""), data.getOrDefault("featureName", ""), data.getOrDefault("ip", ""), data.getOrDefault("priority", ""), data.getOrDefault("remarks", ""), data.getOrDefault("serverName", ""), data.getOrDefault("txnId", ""), data.getOrDefault("username", ""));
+
             AlertDb alertDb = alertDbRepository.getByAlertId(runningAlertDb.getAlertId());
             if (alertDb == null)
                 return new GenricResponse(1, "Fail", "Alert id Not Found");
-            runningAlertDb.setDescription(
-                    alertDb.getDescription()
+
+            var desc = alertDb.getDescription()
                     .replaceAll("<e>", runningAlertDb.getAlertMessage() == null ? "" : runningAlertDb.getAlertMessage())
-                    .replaceAll("<process_name>", runningAlertDb.getAlertProcess() == null ? "" : runningAlertDb.getAlertProcess()));
-          //  runningAlertDb.setModifiedOn( LocalDateTime.now());
+                    .replaceAll("<process_name>", runningAlertDb.getAlertProcess() == null ? "" : runningAlertDb.getAlertProcess());
+            logger.info("Description {}", desc);
+            List<String> paramKeys = data.keySet().stream()
+                    .filter(key -> key.startsWith("param"))
+                    .sorted()
+                    .collect(Collectors.toList());
+            for (String param_i : paramKeys) { // var param_rep = "<"+param_i+">" ;
+                desc = desc.replaceAll("<" + param_i + ">", data.getOrDefault(param_i, ""));
+            }
+            logger.info("Final Description {}", desc);
+            runningAlertDb.setDescription(desc);
             var response = runningAlertDbRepository.save(runningAlertDb);
             return new GenricResponse(0, "Success", String.valueOf(response.getId()));
         } catch (Exception e) {

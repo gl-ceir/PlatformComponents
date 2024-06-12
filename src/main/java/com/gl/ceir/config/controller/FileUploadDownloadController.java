@@ -7,28 +7,41 @@ package com.gl.ceir.config.controller;
 // import com.gl.ceir.config.configuration.ConnectionConfiguration;
 
 import com.gl.ceir.config.model.app.FileUploadDownloadResponse;
-import com.gl.ceir.config.service.impl.ModulesAuditTrailService;
 import com.gl.ceir.config.service.impl.FileStorageService;
- import com.gl.ceir.config.util.VirtualIpAddressUtil;
+import com.gl.ceir.config.service.impl.ModulesAuditTrailService;
+import com.gl.ceir.config.util.VirtualIpAddressUtil;
+import com.google.zxing.*;
+import com.google.zxing.client.j2se.BufferedImageLuminanceSource;
+import com.google.zxing.common.HybridBinarizer;
+import com.google.zxing.qrcode.QRCodeReader;
+import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.json.MappingJacksonValue;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.imageio.ImageIO;
 import javax.servlet.http.HttpServletRequest;
+import java.awt.image.BufferedImage;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
-//@RestController
-// @RequestMapping("/sampleFile")
+@RestController
+@RequestMapping("/sampleFile")
 public class FileUploadDownloadController {
 
     @Autowired
@@ -96,7 +109,71 @@ public class FileUploadDownloadController {
         return new MappingJacksonValue("");
     }
 
+    @PostMapping("/readQROld")
+    public ResponseEntity<String> readQROld(@RequestParam String file) {
+        try {
+            String result = readQROl(file);
+            return ResponseEntity.ok(result);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Failed to read QR Code: " + e.getMessage());
+        }
+    }
 
+
+    public static String readQROl(String path) throws  IOException {
+        String charset = "UTF-8";
+        Map<EncodeHintType, ErrorCorrectionLevel> hashMap = new HashMap<EncodeHintType, ErrorCorrectionLevel>();
+        hashMap.put(EncodeHintType.ERROR_CORRECTION, ErrorCorrectionLevel.L);
+        BinaryBitmap binaryBitmap = new BinaryBitmap(new HybridBinarizer(new BufferedImageLuminanceSource(
+                ImageIO.read(new FileInputStream(path)))));
+        Result result = null;
+        //   Result result = new MultiFormatReader().decode(binaryBitmap);
+        try {
+            result = new MultiFormatReader().decode(binaryBitmap);
+            logger.info("MultiFormatReader  {}", result.getText());
+        } catch (Exception e) {
+            logger.error("Not  {}", e.getLocalizedMessage());
+        }
+        try {
+            QRCodeReader qr = new QRCodeReader();
+            var results = qr.decode(binaryBitmap);
+            logger.info("QRCodeReader  {}", results.getText());
+        } catch (Exception e) {
+            logger.error("Not  {}", e.getLocalizedMessage());
+        }
+        return result.getText();
+    }
+
+
+    @PostMapping("/readQR")
+    public ResponseEntity<String> readQRCode(@RequestParam("file") MultipartFile file) {
+        try {
+            String result = readQRCode(file.getInputStream());
+            return ResponseEntity.ok(result);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Failed to read QR Code: " + e.getMessage());
+        }
+    }
+
+    public String readQRCode(InputStream inputStream) throws Exception {
+        Result result = null;
+        BufferedImage bufferedImage = ImageIO.read(inputStream);
+        BinaryBitmap binaryBitmap = new BinaryBitmap(new HybridBinarizer(new BufferedImageLuminanceSource(bufferedImage)));
+        try {
+            result = new MultiFormatReader().decode(binaryBitmap);
+            logger.info("MultiFormatReader  {}", result.getText());
+        } catch (Exception e) {
+            logger.error("Not  {}", e.getLocalizedMessage());
+        }
+        try {
+            QRCodeReader qr = new QRCodeReader();
+            var results = qr.decode(binaryBitmap);
+            logger.info("QRCodeReader  {}", results.getText());
+        } catch (Exception e) {
+            logger.error("Not  {}", e.getLocalizedMessage());
+        }
+        return result.getText();
+    }
  
 }
 

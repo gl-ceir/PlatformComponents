@@ -27,14 +27,14 @@ public class RunningAlertDb implements Serializable {
     @Column(length = 20)
     private String alertId;
     private String description;
-    private Integer status;
+    // private Integer status;
     private String priority;
     private String ip;
     private String serverName;
     private String featureName;
     private String remarks;
     private String txnId;
-    private Integer userId;
+    private String username;
 
 
 //    @CreationTimestamp
@@ -51,12 +51,7 @@ public class RunningAlertDb implements Serializable {
     @Transient
     private String alertMessage, alertProcess;
 
-    public RunningAlertDb(Integer userId, String alertId, String description, Integer status) {
-        this.userId = userId;
-        this.alertId = alertId;
-        this.description = description;
-        this.status = status;
-    }
+
 
     public Long getId() {
         return id;
@@ -82,13 +77,7 @@ public class RunningAlertDb implements Serializable {
         this.description = description;
     }
 
-    public Integer getStatus() {
-        return status;
-    }
 
-    public void setStatus(Integer status) {
-        this.status = status;
-    }
 
     public String getPriority() {
         return priority;
@@ -138,14 +127,6 @@ public class RunningAlertDb implements Serializable {
         this.txnId = txnId;
     }
 
-    public Integer getUserId() {
-        return userId;
-    }
-
-    public void setUserId(Integer userId) {
-        this.userId = userId;
-    }
-
 
 
     public String getAlertMessage() {
@@ -164,23 +145,42 @@ public class RunningAlertDb implements Serializable {
         this.alertProcess = alertProcess;
     }
 
+    public RunningAlertDb(String description, String alertId) {
+        this.description = description;
+        this.alertId = alertId;
+    }
+
+    public RunningAlertDb(String alertId, String alertMessage, String alertProcess, String description, String featureName, String ip, String priority, String remarks, String serverName, String txnId,String username) {
+        this.alertId = alertId;
+        this.alertMessage = alertMessage;
+        this.alertProcess = alertProcess;
+        this.description = description;
+        this.featureName = featureName;
+        this.ip = ip;
+        this.priority = priority;
+        this.remarks = remarks;
+        this.serverName = serverName;
+        this.txnId = txnId;
+        this.username=username;
+    }
+
 
     @Override
     public String toString() {
         return "RunningAlertDb{" +
-                "id=" + id +
-                ", alertId='" + alertId + '\'' +
+                "alertId='" + alertId + '\'' +
+                ", id=" + id +
                 ", description='" + description + '\'' +
-                ", status=" + status +
                 ", priority='" + priority + '\'' +
                 ", ip='" + ip + '\'' +
                 ", serverName='" + serverName + '\'' +
                 ", featureName='" + featureName + '\'' +
                 ", remarks='" + remarks + '\'' +
                 ", txnId='" + txnId + '\'' +
-                ", userId=" + userId +
+                ", username='" + username + '\'' +
                 ", alertMessage='" + alertMessage + '\'' +
                 ", alertProcess='" + alertProcess + '\'' +
                 '}';
     }
+
 }
