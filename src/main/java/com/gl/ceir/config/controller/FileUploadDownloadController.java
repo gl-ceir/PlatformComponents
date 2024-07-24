@@ -7,10 +7,14 @@ package com.gl.ceir.config.controller;
 // import com.gl.ceir.config.configuration.ConnectionConfiguration;
 
 import com.gl.ceir.config.model.app.FileUploadDownloadResponse;
+import com.gl.ceir.config.service.impl.ChartService;
 import com.gl.ceir.config.service.impl.FileStorageService;
 import com.gl.ceir.config.service.impl.ModulesAuditTrailService;
 import com.gl.ceir.config.util.VirtualIpAddressUtil;
-import com.google.zxing.*;
+import com.google.zxing.BinaryBitmap;
+import com.google.zxing.EncodeHintType;
+import com.google.zxing.MultiFormatReader;
+import com.google.zxing.Result;
 import com.google.zxing.client.j2se.BufferedImageLuminanceSource;
 import com.google.zxing.common.HybridBinarizer;
 import com.google.zxing.qrcode.QRCodeReader;
@@ -30,10 +34,7 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.imageio.ImageIO;
 import javax.servlet.http.HttpServletRequest;
 import java.awt.image.BufferedImage;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -52,6 +53,10 @@ public class FileUploadDownloadController {
 
     @Autowired
     VirtualIpAddressUtil virtualIpAddressUtil;
+
+    @Autowired
+    private ChartService chartService;
+
 
     private static final Logger logger = LogManager.getLogger(FileUploadDownloadController.class);
   //  @PostMapping("/uploadFile")
@@ -108,6 +113,7 @@ public class FileUploadDownloadController {
         fileStorageService.uploadFile(path);
         return new MappingJacksonValue("");
     }
+
 
     @PostMapping("/readQROld")
     public ResponseEntity<String> readQROld(@RequestParam String file) {
@@ -173,6 +179,24 @@ public class FileUploadDownloadController {
             logger.error("Not  {}", e.getLocalizedMessage());
         }
         return result.getText();
+    }
+
+
+    @GetMapping("/generate-pdf")
+    public ResponseEntity<byte[]> generatePdf() throws Exception {
+
+        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+
+
+        byte[] bArray = chartService.generateChartImage();
+        try (OutputStream out = new FileOutputStream("out.pdf")) {
+            out.write(bArray);
+        }
+
+        return ResponseEntity.ok()
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=chart.pdf")
+                .contentType(MediaType.APPLICATION_PDF)
+                .body(byteArrayOutputStream.toByteArray());
     }
  
 }
