@@ -7,7 +7,5 @@ import com.gl.ceir.config.model.app.RunningAlertDb;
 
 public interface RunningAlertDbRepository extends JpaRepository<RunningAlertDb, Long>, JpaSpecificationExecutor<RunningAlertDb> {
 
-	public RunningAlertDb getById(long id);
-	
 	public RunningAlertDb getByAlertId(String alertId);
 }

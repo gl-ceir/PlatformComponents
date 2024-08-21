@@ -22,9 +22,8 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 
-// @Validated
 @RestController
-public class NotificationController {//sachin
+public class NotificationController {
 
     @Value("${serverName}")
     private String serverName;

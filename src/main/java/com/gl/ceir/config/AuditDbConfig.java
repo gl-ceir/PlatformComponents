@@ -62,19 +62,3 @@ public class AuditDbConfig {
     }
 }
 
-//     @Bean(name = "barDataSource")
-//  @ConfigurationProperties(prefix = "bar.datasource")
-//  public DataSource dataSource() {
-//    return DataSourceBuilder.create().build();
-//  }
-//    @Bean
-//    @ConfigurationProperties(prefix = "audit.datasource")
-//    public DataSourceProperties auditDataSourceProperties() {
-//        return new DataSourceProperties();
-//    }
-//
-//    public DataSource auditDataSource() {
-//        return auditDataSourceProperties()
-//                .initializeDataSourceBuilder()
-//                .build();
-//    }
