@@ -266,7 +266,7 @@
 <!--        </dependencyManagement>-->
 
     <build>
-        <finalName>PlatformComponents</finalName>
+        <finalName>api_internal</finalName>
         <plugins>
             <plugin>
                 <groupId>org.springframework.boot</groupId>
