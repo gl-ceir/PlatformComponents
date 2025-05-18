@@ -9,7 +9,6 @@ import lombok.ToString;
 import org.hibernate.annotations.DynamicInsert;
 
 import javax.persistence.*;
-import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
@@ -61,7 +60,7 @@ public class Notification implements Serializable {
 
     private String operatorName;
 
-    @Size(max = 2, message = "msgLang must be less than 3 characters")
+  //  @Size(max = 2, message = "msgLang must be less than 3 characters")
     private String msgLang;
 
   //  private Integer deliveryStatus;

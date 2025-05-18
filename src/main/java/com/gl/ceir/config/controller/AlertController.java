@@ -11,6 +11,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.converter.json.MappingJacksonValue;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Map;
+
 @RestController
 public class AlertController {
 
@@ -24,8 +26,7 @@ public class AlertController {
 
     @PostMapping("/alert")
     @ApiOperation(value = "Raise Alert ", response = String.class)
-    public MappingJacksonValue save(@RequestBody RunningAlertDb alertRequest) {
-        return new MappingJacksonValue(alertServiceImpl.saveAlertWithParam(alertRequest));
+    public MappingJacksonValue save(@RequestBody Map<String, String> data) {
+        return new MappingJacksonValue(alertServiceImpl.saveAlertWithParam(data));
     }
-
 }

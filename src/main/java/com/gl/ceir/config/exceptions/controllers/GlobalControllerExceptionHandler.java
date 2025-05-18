@@ -30,7 +30,7 @@ import org.springframework.web.client.HttpServerErrorException.InternalServerErr
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.NoHandlerFoundException;
 
-//@EnableWebMvc   //to be remove FOR SWAGGER
+//@EnableWebMvc
 @ControllerAdvice
 @RestControllerAdvice
 public class GlobalControllerExceptionHandler {
@@ -192,8 +192,7 @@ public class GlobalControllerExceptionHandler {
                 HttpStatus.NOT_FOUND);
     }
 
-    /* Custom Exceptions .Not used Currently*/
-    @ExceptionHandler(value = MyFileNotFoundException.class)
+     @ExceptionHandler(value = MyFileNotFoundException.class)
     public ResponseEntity<Object> exception(MyFileNotFoundException exception) {
         return new ResponseEntity<>(new ApiResponse(HttpStatus.NOT_FOUND.value(), "FAIL", exception.getMessage()),
                 HttpStatus.NOT_FOUND);

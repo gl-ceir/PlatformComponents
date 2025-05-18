@@ -28,12 +28,4 @@ public class SwaggerConfig {
 				.licenseUrl("http://www.apache.org/licenses/LICENSE-2.0.html").version("1.0.0").build();
 	}
 
-//    @Bean
-//    public SecurityWebFilterChain securityWebFilterChain(
-//            ServerHttpSecurity http) {
-//        return http.authorizeExchange()
-//                .pathMatchers("/actuator/**").permitAll()
-//                .anyExchange().authenticated()
-//                .and().build();
-//    }
 }

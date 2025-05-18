@@ -8,14 +8,9 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.AllArgsConstructor;
 
-/**
- *
- * @author maverick
- */
+
 @Getter
 @Setter
-// @AllArgsConstructor
-
 public class ExceptionResponse {
 
     private int statusCode;

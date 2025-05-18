@@ -28,8 +28,10 @@ public class QRCodeGenerator {
 
     public static Path generateQRCodeImage(String text, int width, int height, String filePath) throws WriterException, IOException {
         QRCodeWriter qrCodeWriter = new QRCodeWriter();
+
         BitMatrix bitMatrix = qrCodeWriter.encode(text, BarcodeFormat.QR_CODE, width, height);
         Path path = FileSystems.getDefault().getPath(filePath);
+
         MatrixToImageWriter.writeToPath(bitMatrix, "PNG", path);
         logger.info("QR Code Generated for text:{}", text);
         return path;
@@ -63,9 +65,9 @@ public class QRCodeGenerator {
     private static String toTable(Map<String, String> data) {
         String tableData = "";
         for (String key : data.keySet()) {
-            logger.info("File key "+ key);
+            logger.info("File key " + key);
             tableData = tableData + key + ":" + data.get(key) + "\n";
-            logger.info("Todate tableData :"+ tableData);
+            logger.info("TableData :" + tableData);
         }
         return tableData;
     }

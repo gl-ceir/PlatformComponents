@@ -12,7 +12,6 @@ import com.gl.ceir.config.exceptions.MyFileNotFoundException;
 import com.gl.ceir.config.exceptions.ResourceNotFoundException;
 import com.gl.ceir.config.exceptions.ResourceServicesException;
 
-// @ControllerAdvice
 public class AllExceptions {
 
 	@ExceptionHandler(value = ResourceNotFoundException.class)

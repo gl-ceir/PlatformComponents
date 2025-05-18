@@ -9,7 +9,5 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface AlertDbRepository extends JpaRepository<AlertDb, Long>, JpaSpecificationExecutor<AlertDb> {
 
-	public AlertDb getById(long id);
-	
 	public AlertDb getByAlertId(String alertId);
 }

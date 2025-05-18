@@ -71,7 +71,7 @@ public class VirtualIpAddressUtil {
                 }
             }
         } catch (SocketException e) {
-            log.info(" (error retrieving network interface list)" + e);
+            log.info("Error retrieving network interface list" + e);
         }
 
     }

@@ -15,18 +15,15 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.converter.json.MappingJacksonValue;
-import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.PostMapping;
+ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.validation.Valid;
 
-@Validated
 @RestController
-public class NotificationController {//sachin
+public class NotificationController {
 
     @Value("${serverName}")
     private String serverName;
@@ -45,7 +42,7 @@ public class NotificationController {//sachin
 
     @ApiOperation(value = "Save all Notifications", response = String.class)
     @PostMapping("addNotifications")
-    public MappingJacksonValue addNotifications(@RequestBody @Valid Notification notification) {
+    public MappingJacksonValue addNotifications(@RequestBody  Notification notification) {
         MappingJacksonValue mapping = new MappingJacksonValue(notificationServiceImpl.saveNotifications(notification));
         return mapping;
     }
@@ -64,6 +61,7 @@ public class NotificationController {//sachin
         notif.setEmail(email);
         notif.setMessage(message);
         notif.setSubject(subject);
+        notif.setMsgLang(msgLang == null  || msgLang.isEmpty() ? "en" : msgLang.equalsIgnoreCase("kh") ? "kh" : "en");    // needs refactoring
         notif.setMsgLang(msgLang);
         notif.setFeatureTxnId(txnId);
         String filePath = fileStorageService.storeFile(notif, file);

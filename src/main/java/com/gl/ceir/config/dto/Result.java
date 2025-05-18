@@ -4,10 +4,6 @@
  */
 package com.gl.ceir.config.dto;
 
-/**
- *
- * @author maverick
- */
 public class Result {
 
     String message;

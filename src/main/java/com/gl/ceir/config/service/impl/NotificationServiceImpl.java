@@ -35,11 +35,6 @@ public class NotificationServiceImpl {
             logger.info("Request [ {} ]", notification);
             notification.setOperatorName(getActualOperator(notification));
 
-//            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-//            LocalDateTime dateTime = LocalDateTime.parse(notification.getDeliveryDateTime().toString().replace("T", " "), formatter);
-//            logger.info("dateTimedateTime [ {} ]", dateTime);
-//            notification.setDeliveryDateTime(dateTime);
-//            logger.info("Request12321313 [ {} ]", notification);
             var value = notificationRepository.save(notification);
             return new GenricResponse(0, "Success", String.valueOf(value.getId()));
         } catch (Exception e) {
@@ -63,4 +58,3 @@ public class NotificationServiceImpl {
         }
     }
 }
-// var value = operatorSeriesRepository.getBySeriesStartAndSeriesType(Integer.parseInt(msisdn.substring(0, 5)), "msisdn").getOperatorName();
